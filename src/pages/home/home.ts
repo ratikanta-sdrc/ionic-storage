@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-
+import { AlertController } from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
@@ -13,7 +13,8 @@ export class HomePage {
   motherName: string
   motherAge: number
   allDetails: any = []
-  constructor(private storage: Storage) {
+  avl: boolean=false
+  constructor(private storage: Storage, private alertCtrl: AlertController) {
     this.storage.get('allDetails').then((val) => {
       if(val==null){
         this.allDetails=[]
@@ -32,33 +33,51 @@ export class HomePage {
   submit(){
     if(this.allDetails.length!=0){
       for(let d of this.allDetails){
-        if(d.babyId != this.babyId){
-          this.details.babyId=this.babyId
-          this.details.motherName=this.motherName
-          this.details.motherAge=this.motherAge
-          this.allDetails.push(this.details);
-          this.storage.set('allDetails',this.allDetails)
-          console.log("baby details saved successfully!")
-        }else{
-          console.log("baby id already exists for id : "+d.babyId)
+        if(d.babyId == this.babyId){
+          this.avl=true
         }
       }
+      if(!this.avl){
+        var newDetails:any={}
+        newDetails.babyId=this.babyId
+        newDetails.motherName=this.motherName
+        newDetails.motherAge=this.motherAge
+        this.allDetails.push(newDetails)
+        this.storage.set('allDetails',this.allDetails)
+        this.presentAlert('baby details saved successfully!')
+        this.avl=false
+      }else{
+        this.presentAlert("baby id already exists for id : "+this.babyId)
+        this.avl=false
+      }
     }else{
-      this.details.babyId=this.babyId 
+          this.details.babyId=this.babyId 
           this.details.motherName=this.motherName
           this.details.motherAge=this.motherAge
           this.allDetails.push(this.details);
           this.storage.set('allDetails',this.allDetails)
-          console.log("baby details saved successfully!")
+          this.presentAlert('baby details saved successfully!')
     }
     
     
   }
   getData(){
     this.storage.get('allDetails').then((val) => {
-      // console.log(val);
-      
       console.log(val)
     });
+  }
+  deleteDetails(item){
+    this.allDetails = this.allDetails.filter(obj => obj !== item);
+    this.storage.set('allDetails',this.allDetails)
+    this.presentAlert('baby details deleted successfully!')
+  }
+
+  presentAlert(msg) {
+    let alert = this.alertCtrl.create({
+      title: '',
+      subTitle: msg,
+      buttons: ['Ok']
+    });
+    alert.present();
   }
 }

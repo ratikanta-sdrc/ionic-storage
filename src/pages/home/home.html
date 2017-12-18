@@ -17,4 +17,15 @@
   <button ion-button (click)="submit()">save</button>
   <br>
   <button ion-button (click)="getData()">get data</button>
+
+  <ion-list *ngFor="let item of allDetails">
+    <ion-item>
+      <ion-avatar item-end>
+        <ion-icon name="trash" (click)="deleteDetails(item)"></ion-icon>
+      </ion-avatar>
+      <h3>baby id: {{ item.babyId }}</h3>
+      <h3>mother: {{item.motherName}}</h3>
+      <h3>mother's age: {{item.motherAge}}</h3>
+    </ion-item>
+  </ion-list>
 </ion-content>
