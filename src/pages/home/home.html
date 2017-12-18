@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Ionic Blank
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  Baby ID<br>
+  <input type="text" [(ngModel)]="babyId"><br>
+  Mother's name<br>
+  <input type="text" [(ngModel)]="motherName"><br>
+  Mother's age<br>
+  <input type="number" [(ngModel)]="motherAge"><br>
+
+  <button ion-button (click)="submit()">save</button>
+  <br>
+  <button ion-button (click)="getData()">get data</button>
+</ion-content>
